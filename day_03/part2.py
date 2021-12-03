@@ -1,9 +1,13 @@
 #!/usr/bin/env python3
 
-with open('input.txt') as fd:
-    bits = [line.strip() for line in fd]
+import sys
 
-# print(bits)
+def dbg(msg = None):
+    print(f"line {sys._getframe().f_back.f_lineno:4}: {msg if msg is not None else ''}")
+
+bits = [line.strip() for line in open('input.txt')]
+
+# dbg(bits)
 
 oxy_bits = []
 co2_bits = []
@@ -65,8 +69,8 @@ for i in range(1,len(bits[0])):
     if len(co2_bits) == 1:
         # print('breaking', co2_bits)
         break
-    
+
 # print(oxy_bits[0], int(oxy_bits[0], 2))
 # print(co2_bits[0], int(co2_bits[0], 2))
 
-print(int(co2_bits[0], 2) * int(oxy_bits[0], 2))
+dbg(f'{int(co2_bits[0], 2) * int(oxy_bits[0], 2) = }')
