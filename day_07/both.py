@@ -1,7 +1,12 @@
 #!/usr/bin/env python3
 
+import statistics
+
 for file in ['example.txt', 'input.txt']:
     hpos = list(map(int, open(file).read().strip().split(',')))
+
+    print('Mean   position: ', statistics.mean(hpos))
+    print('Median position: ', statistics.median(hpos))
 
     # Part 1
     fuels = {}
