@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 
-import pprint as pp
-
 def parse(input, paper, instr):
     lines = [l.strip() for l in open(input)]
     for l in lines:
@@ -24,10 +22,24 @@ def print_paper(paper):
     for y in range(y_min, y_max+1):
         for x in range(x_min, x_max+1):
             if (x,y) in paper:
-                print('#', end='')
+                print('█', end='')
             else:
                 print(' ', end='')
         print()
+
+def fold(i, paper):
+    axis = i[0]
+    dist = i[1]
+    cur_dots = list(paper.keys())
+    for dot in cur_dots:
+        if axis == 'y':
+            if dot[1] > dist:
+                del(paper[dot])
+                paper[(dot[0], 2*dist - dot[1])] = True
+        else:
+            if dot[0] > dist:
+                del(paper[dot])
+                paper[(2*dist - dot[0], dot[1])] = True
 
 def part1(input, debug=False):
     paper = {}
@@ -36,21 +48,11 @@ def part1(input, debug=False):
     parse(input, paper, instr)
 
     for i in instr[:1]:
-        axis = i[0]
-        dist = i[1]
-        cur_dots = list(paper.keys())
-        for dot in cur_dots:
-            if axis == 'y':
-                if dot[1] > dist:
-                    del(paper[dot])
-                    paper[(dot[0], 2*dist - dot[1])] = True
-            else:
-                if dot[0] > dist:
-                    del(paper[dot])
-                    paper[(2*dist - dot[0], dot[1])] = True
+        fold(i, paper)
 
     print(f'Part 1 {input}: {len(paper.keys())}')
     if debug: print_paper(paper)
+
 
 def part2(input, debug=False):
     paper = {}
@@ -59,18 +61,7 @@ def part2(input, debug=False):
     parse(input, paper, instr)
 
     for i in instr:
-        axis = i[0]
-        dist = i[1]
-        cur_dots = list(paper.keys())
-        for dot in cur_dots:
-            if axis == 'y':
-                if dot[1] > dist:
-                    del(paper[dot])
-                    paper[(dot[0], 2*dist - dot[1])] = True
-            else:
-                if dot[0] > dist:
-                    del(paper[dot])
-                    paper[(2*dist - dot[0], dot[1])] = True
+        fold(i, paper)
 
     print(f'Part 2 {input}: {len(paper)}')
     print_paper(paper)
