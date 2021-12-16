@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import pprint as pp
+import heapq
 
 def parse(input):
     lines = [l.strip() for l in open(input)]
@@ -24,14 +25,18 @@ def print_risk(risk):
         print()
 
 def walk(risk, start, stop):
+    frontier_h = []
+    heapq.heappush(frontier_h, (0, start))
     frontier = {}
     frontier[start] = 0
+    
     visited = {}
     total = len(risk.keys())
 
     while True:
-        lowest = min(frontier, key=frontier.get)
-        value = frontier[lowest]
+        value, lowest = heapq.heappop(frontier_h)
+        while lowest in visited:
+            value, lowest = heapq.heappop(frontier_h)
         del(frontier[lowest])
         visited[lowest] = True
 
@@ -39,10 +44,13 @@ def walk(risk, start, stop):
         y = lowest[1]
         for next_pos in [(x+1,y), (x,y+1), (x-1,y), (x,y-1)]:
             if next_pos not in visited and next_pos in risk:
+                next_val = value + risk[next_pos]
                 if next_pos in frontier:
-                    frontier[next_pos] = min(frontier[next_pos], value + risk[next_pos])
-                else:
-                    frontier[next_pos] = value + risk[next_pos]
+                    next_val = min(frontier[next_pos], next_val)
+                frontier[next_pos] = next_val
+
+                heapq.heappush(frontier_h, (next_val, next_pos))
+
                 if next_pos == stop:
                     return frontier[next_pos]
 
