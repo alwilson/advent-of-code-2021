@@ -2,6 +2,7 @@
 
 import functools
 
+
 def parse(input):
     lines = [l.strip() for l in open(input)]
     p1 = int(lines[0].split()[-1])
@@ -43,14 +44,6 @@ def part1(input, debug=False):
     
     if debug: print(f'{roll = } {p1 = } {p2 = } {p1_score = } {p2_score = }')
     print(f'Part 1 {input}: {roll_total*min(p1_score,p2_score) = }')
-
-
-def qturn(p, roll):
-    for _ in range(3):
-        p += roll
-        p %= 10
-        if p == 0: p = 10
-    return p
 
 
 @functools.cache
